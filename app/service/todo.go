@@ -33,6 +33,7 @@ func (ts *todoService) CreateTodo(todo models.Todo) (models.Todo, error) {
 	t := models.Todo{}
 	t.Title = todo.Title
 	t.Description = todo.Description
+	t.IsFinished = false
 
 	_, err := ts.todoRepository.CreateTodo(&t)
 	if err != nil {
