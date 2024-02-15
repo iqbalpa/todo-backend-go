@@ -4,7 +4,7 @@ import (
 	"main/app/controller"
 	"main/app/repository"
 	"main/app/service"
-	"net/http"
+	"main/app/utils"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
@@ -27,10 +27,9 @@ func CreateTodo(todoController controller.TodoController) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		todo, err := todoController.CreateTodo(ctx)
 		if err != nil {
-			ctx.JSON(http.StatusBadRequest, "failed to create")
+			utils.FailedResponse(ctx, "FAILED", "failed to create todo", err)
 		} else {
-			ctx.JSON(http.StatusOK, todo)
+			utils.SuccessResponse(ctx, "todo created", todo)
 		}
-		return
 	}
 }
