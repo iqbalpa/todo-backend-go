@@ -2,6 +2,7 @@ package utils
 
 import (
 	"fmt"
+	"main/config"
 
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
@@ -10,10 +11,11 @@ import (
 var DB *gorm.DB
 
 func ConnectDB() {
-	dsn := "host=localhost user=postgres password=iqbalpahlevi dbname=todo_go port=5432 sslmode=disable"
+	config := config.LoadEnv()
+	dsn := config.GetDSN()
 
 	var err error
-	DB, err = gorm.Open("postgres", dsn)
+	DB, err = gorm.Open(config.DatabaseDriver, dsn)
 	
 	if err != nil {
 		fmt.Println("Failed to connect database ", err.Error())

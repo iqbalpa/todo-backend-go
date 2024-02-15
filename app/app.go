@@ -1,10 +1,10 @@
 package app
 
 import (
-	"fmt"
 	"main/app/models"
 	"main/app/routes"
 	"main/app/utils"
+	"main/config"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
@@ -37,10 +37,12 @@ func NewApp() *App {
 }
 
 func (a *App) Run() {
+	config := config.LoadEnv()
+
 	api := a.api
 	db := a.db
 
-	serverPort := fmt.Sprintf("localhost:%s", "8080")
+	serverPort := config.GetServerPort()
 	routes.TodoRoutes(api, db)
 
 	a.router.Run(serverPort)
