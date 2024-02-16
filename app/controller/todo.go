@@ -10,6 +10,7 @@ import (
 
 type TodoController interface {
 	CreateTodo(ctx *gin.Context) (models.Todo, error)
+	GetTodoById(ctx *gin.Context) (models.Todo, error)
 }
 
 type todoController struct {
@@ -31,6 +32,15 @@ func (tc *todoController) CreateTodo(ctx *gin.Context) (models.Todo, error) {
 		return models.Todo{}, err
 	}
 	_, err = tc.service.CreateTodo(todo)
+	if err != nil {
+		return models.Todo{}, err
+	}
+	return todo, nil
+}
+
+func (tc *todoController) GetTodoById(ctx *gin.Context) (models.Todo, error) {
+	id := ctx.Param("id")
+	todo, err := tc.service.GetTodoById(id)
 	if err != nil {
 		return models.Todo{}, err
 	}

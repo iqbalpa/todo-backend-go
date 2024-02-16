@@ -19,3 +19,13 @@ func (tr *TodoRepository) CreateTodo(todo *models.Todo) (*models.Todo, error) {
 	}
 	return todo, nil
 }
+
+// Get todo instance by id
+func (tr *TodoRepository) GetTodoById(id string) (models.Todo, error) {
+	var todo models.Todo
+	err := utils.DB.Where("id = ?", id).Take(&todo).Error
+	if err != nil {
+		return models.Todo{}, err
+	}
+	return todo, nil
+}

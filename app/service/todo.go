@@ -8,6 +8,7 @@ import (
 
 type TodoService interface {
 	CreateTodo(models.Todo) (models.Todo, error)
+	GetTodoById(string) (models.Todo, error)
 }
 
 type todoService struct {
@@ -40,4 +41,12 @@ func (ts *todoService) CreateTodo(todo models.Todo) (models.Todo, error) {
 		return models.Todo{}, err
 	}
 	return t, nil
+}
+
+func (ts *todoService) GetTodoById(id string) (models.Todo, error) {
+	todo, err := ts.todoRepository.GetTodoById(id)
+	if err != nil {
+		return models.Todo{}, err
+	}
+	return todo, nil
 }
