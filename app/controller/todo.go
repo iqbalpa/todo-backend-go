@@ -12,6 +12,7 @@ type TodoController interface {
 	CreateTodo(ctx *gin.Context) (models.Todo, error)
 	GetTodoById(ctx *gin.Context) (models.Todo, error)
 	GetTodos(ctx *gin.Context) ([]models.Todo, error)
+	DeleteTodoById(ctx *gin.Context) (string, error)
 }
 
 type todoController struct {
@@ -54,4 +55,10 @@ func (tc *todoController) GetTodos(ctx *gin.Context) ([]models.Todo, error) {
 		return []models.Todo{}, err
 	}
 	return todos, nil
+}
+
+func (tc *todoController) DeleteTodoById(ctx *gin.Context) (string, error) {
+	id := ctx.Param("id")
+	str, err := tc.service.DeleteTodoById(id)
+	return str, err
 }

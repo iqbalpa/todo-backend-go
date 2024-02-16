@@ -10,6 +10,7 @@ type TodoService interface {
 	CreateTodo(models.Todo) (models.Todo, error)
 	GetTodoById(string) (models.Todo, error)
 	GetTodos() ([]models.Todo, error)
+	DeleteTodoById(string) (string, error)
 }
 
 type todoService struct {
@@ -58,4 +59,9 @@ func (ts *todoService) GetTodos() ([]models.Todo, error) {
 		return []models.Todo{}, nil
 	}
 	return todos, nil
+}
+
+func (ts *todoService) DeleteTodoById(id string) (string, error) {
+	str, err := ts.todoRepository.DeleteTodoById(id)
+	return str, err
 }

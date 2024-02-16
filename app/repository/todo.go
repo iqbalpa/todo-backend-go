@@ -39,3 +39,13 @@ func (tr *TodoRepository) GetTodos() ([]models.Todo, error){
 	}
 	return todos, nil
 }
+
+// delete announcement by id
+func (tr *TodoRepository) DeleteTodoById(id string) (string, error) {
+	var todo models.Todo
+	err := utils.DB.Where("id = ?", id).Delete(&todo).Error
+	if err != nil {
+		return "failed to delete", err
+	}
+	return "todo deleted", nil
+}
