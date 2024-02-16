@@ -1,7 +1,6 @@
 package app
 
 import (
-	"log"
 	"main/app/models"
 	"main/app/routes"
 	"main/app/utils"

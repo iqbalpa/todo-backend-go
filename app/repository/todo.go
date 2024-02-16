@@ -49,3 +49,12 @@ func (tr *TodoRepository) DeleteTodoById(id string) (string, error) {
 	}
 	return "todo deleted", nil
 }
+
+// update todo (title and desc)
+func (tr *TodoRepository) UpdateTodoById(id string, todo *models.Todo) (*models.Todo, error) {
+	err := utils.DB.Model(&models.Todo{}).Where("id = ?", id).Updates(todo).Error
+	if err != nil {
+		return &models.Todo{}, err
+	}
+	return todo, nil
+}
