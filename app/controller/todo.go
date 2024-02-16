@@ -11,6 +11,7 @@ import (
 type TodoController interface {
 	CreateTodo(ctx *gin.Context) (models.Todo, error)
 	GetTodoById(ctx *gin.Context) (models.Todo, error)
+	GetTodos(ctx *gin.Context) ([]models.Todo, error)
 }
 
 type todoController struct {
@@ -45,4 +46,12 @@ func (tc *todoController) GetTodoById(ctx *gin.Context) (models.Todo, error) {
 		return models.Todo{}, err
 	}
 	return todo, nil
+}
+
+func (tc *todoController) GetTodos(ctx *gin.Context) ([]models.Todo, error) {
+	todos, err := tc.service.GetTodos()
+	if err != nil {
+		return []models.Todo{}, err
+	}
+	return todos, nil
 }

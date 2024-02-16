@@ -29,3 +29,13 @@ func (tr *TodoRepository) GetTodoById(id string) (models.Todo, error) {
 	}
 	return todo, nil
 }
+
+// Get all todo instances
+func (tr *TodoRepository) GetTodos() ([]models.Todo, error){
+	var todos []models.Todo
+	err := utils.DB.Find(&todos).Error
+	if err != nil {
+		return []models.Todo{}, nil
+	}
+	return todos, nil
+}
