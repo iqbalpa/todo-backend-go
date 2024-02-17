@@ -30,7 +30,7 @@ func (uc *userController) CreateUser(ctx *gin.Context) (models.User, error) {
 	if err != nil {
 		return models.User{}, err
 	}
-	_, err = uc.service.CreateUser(user)
+	user, err = uc.service.CreateUser(user)
 	if err != nil {
 		return models.User{}, err
 	}

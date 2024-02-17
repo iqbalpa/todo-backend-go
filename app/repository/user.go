@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"fmt"
 	"main/app/models"
 	"main/app/utils"
 )
@@ -13,7 +14,13 @@ func NewUserRepository() *UserRepository {
 
 // Create user instance
 func (tr *UserRepository) CreateUser(user *models.User) (*models.User, error) {
-	err := utils.DB.Create(user).Error
+	// hash the password
+	var err error
+	user.Password, err = utils.HashingPassword(user.Password)
+	if err != nil {
+		return &models.User{}, fmt.Errorf("failed to hash the password")
+	}
+	err = utils.DB.Create(user).Error
 	if err != nil {
 		return &models.User{}, err
 	}
