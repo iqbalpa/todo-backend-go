@@ -20,7 +20,7 @@ func NewApp() *App {
 	// connect to database
 	utils.ConnectDB()
 	// migrate models
-	utils.DB.AutoMigrate(&models.Todo{})
+	utils.DB.AutoMigrate(&models.Todo{}, &models.User{})
 
 	// initiate router
 	router := gin.Default()
@@ -44,6 +44,7 @@ func (a *App) Run() {
 
 	serverPort := config.GetServerPort()
 	routes.TodoRoutes(api, db)
+	routes.UserRoutes(api, db)
 
 	a.router.Run(serverPort)
 }
