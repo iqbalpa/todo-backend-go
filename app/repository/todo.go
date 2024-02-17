@@ -58,3 +58,20 @@ func (tr *TodoRepository) UpdateTodoById(id string, todo *models.Todo) (*models.
 	}
 	return todo, nil
 }
+
+// finish todo
+func (tr *TodoRepository) FinishTodoById(id string) (models.Todo, error) {
+	var todo models.Todo
+	err := utils.DB.First(&todo, "id = ?", id).Error
+	if err != nil {
+		return models.Todo{}, err
+	}
+
+	// Update the IsFinished field
+	todo.IsFinished = true
+	err = utils.DB.Save(&todo).Error
+	if err != nil {
+		return models.Todo{}, err
+	}
+	return todo, nil
+}

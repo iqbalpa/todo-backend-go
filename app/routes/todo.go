@@ -24,6 +24,7 @@ func TodoRoutes(api *gin.RouterGroup, db *gorm.DB){
 		todo.GET("/:id", GetTodoById(todoController))
 		todo.PATCH("/:id", UpdateTodoById(todoController))
 		todo.DELETE("/:id", DeleteTodoById(todoController))
+		todo.PUT("/finish/:id", FinishTodoById(todoController))
 	}
 }
 
@@ -78,6 +79,17 @@ func UpdateTodoById(todoController controller.TodoController) gin.HandlerFunc {
 			utils.FailedResponse(ctx, "FAILED", "failed to update todo", err)
 		} else {
 			utils.SuccessResponse(ctx, "todo updated", todo)
+		}
+	}
+}
+
+func FinishTodoById(todoController controller.TodoController) gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		todo, err := todoController.FinishTodoById(ctx)
+		if err != nil {
+			utils.FailedResponse(ctx, "FAILED", "failed to finish the todo", err)
+		} else {
+			utils.SuccessResponse(ctx, "todo finished", todo)
 		}
 	}
 }
