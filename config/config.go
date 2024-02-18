@@ -10,13 +10,18 @@ import (
 )
 
 type Config struct {
+	// server
 	ServerPort string
+	// database
 	DatabaseDriver string
 	DatabaseHost string
 	DatabasePort string
 	DatabaseName string
 	DatabaseUser string
 	DatabasePassword string
+	// auth
+	JwtSecretKey string
+	JwtExpiresIn string
 }
 
 func NewConfig() *Config {
@@ -29,6 +34,8 @@ func NewConfig() *Config {
 		DatabaseName: "todo_go",
 		DatabaseUser: "postgres",
 		DatabasePassword: "",
+		JwtSecretKey: "",
+		JwtExpiresIn: "",
 	}
 }
 
@@ -60,6 +67,12 @@ func LoadEnv() *Config {
 	if password := os.Getenv("DATABASE_PASSWORD"); password != "" {
 		config.DatabasePassword = password
 	}
+	if key := os.Getenv("JWT_SECRET_KEY"); key != "" {
+		config.JwtSecretKey = key
+	}
+	if exp := os.Getenv("JWT_EXPIRE_IN_HOur"); exp != "" {
+		config.JwtExpiresIn = exp
+	}
 
 	return config
 }
@@ -77,4 +90,12 @@ func (config *Config) GetDSN() string {
 
 func (config *Config) GetServerPort() string {
 	return fmt.Sprintf("%s:%s", config.DatabaseHost, config.ServerPort)
+}
+
+func (config *Config) GetJwtSecretKey() string {
+	return config.JwtSecretKey
+}
+
+func (config *Config) GetJwtExpiration() string {
+	return config.JwtExpiresIn
 }

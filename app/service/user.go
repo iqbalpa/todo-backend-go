@@ -8,6 +8,7 @@ import (
 
 type UserService interface {
 	CreateUser(models.User) (models.User, error)
+	LoginUser(string, string) (string, error)
 }
 
 type userService struct {
@@ -35,4 +36,12 @@ func (us *userService) CreateUser(user models.User) (models.User, error) {
 		return models.User{}, err
 	}
 	return *u, nil
+}
+
+func (us *userService) LoginUser(username, password string) (string, error) {
+	token, err := us.userRepository.LoginUser(username, password)
+	if err != nil {
+		return "", err
+	}
+	return token, nil
 }

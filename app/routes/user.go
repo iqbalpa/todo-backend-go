@@ -20,9 +20,11 @@ func UserRoutes(api *gin.RouterGroup, db *gorm.DB){
 	user := api.Group("/user")
 	{
 		user.POST("/register", CreateUser(userController))
+		user.POST("/login", LoginUser(userController))
 	}
 }
 
+// ! REMOVE PASSWORD FROM THE PAYLOAD
 func CreateUser(userController controller.UserController) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		user, err := userController.CreateUser(ctx)
@@ -30,6 +32,17 @@ func CreateUser(userController controller.UserController) gin.HandlerFunc {
 			utils.FailedResponse(ctx, "FAILED", "failed to register", err)
 		} else {
 			utils.SuccessResponse(ctx, "register success", user)
+		}
+	}
+}
+
+func LoginUser(userController controller.UserController) gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		token, err := userController.LoginUser(ctx)
+		if err != nil {
+			utils.FailedResponse(ctx, "FAILED", "failed to login", err)
+		} else {
+			utils.SuccessResponse(ctx, "login success", token)
 		}
 	}
 }
