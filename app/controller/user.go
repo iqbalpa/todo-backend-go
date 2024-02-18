@@ -26,7 +26,6 @@ func NewUserController(service service.UserService, db *gorm.DB) UserController 
 	}
 } 
 
-// ! REMOVE PASSWORD FROM THE PAYLOAD
 func (uc *userController) CreateUser(ctx *gin.Context) (models.User, error) {
 	var user models.User
 	err := ctx.ShouldBindJSON(&user)
@@ -37,6 +36,8 @@ func (uc *userController) CreateUser(ctx *gin.Context) (models.User, error) {
 	if err != nil {
 		return models.User{}, err
 	}
+	// remove the password from the payload
+	user.Password = ""
 	return user, nil
 }
 

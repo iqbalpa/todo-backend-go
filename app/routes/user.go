@@ -24,7 +24,6 @@ func UserRoutes(api *gin.RouterGroup, db *gorm.DB){
 	}
 }
 
-// ! REMOVE PASSWORD FROM THE PAYLOAD
 func CreateUser(userController controller.UserController) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		user, err := userController.CreateUser(ctx)
