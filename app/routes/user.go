@@ -19,7 +19,7 @@ func UserRoutes(api *gin.RouterGroup, db *gorm.DB){
 
 	user := api.Group("/user")
 	{
-		user.POST("/", CreateUser(userController))
+		user.POST("/register", CreateUser(userController))
 	}
 }
 
@@ -27,9 +27,9 @@ func CreateUser(userController controller.UserController) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		user, err := userController.CreateUser(ctx)
 		if err != nil {
-			utils.FailedResponse(ctx, "FAILED", "failed to create todo", err)
+			utils.FailedResponse(ctx, "FAILED", "failed to register", err)
 		} else {
-			utils.SuccessResponse(ctx, "todo created", user)
+			utils.SuccessResponse(ctx, "register success", user)
 		}
 	}
 }
