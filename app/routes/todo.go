@@ -2,6 +2,7 @@ package routes
 
 import (
 	"main/app/controller"
+	"main/app/middleware"
 	"main/app/repository"
 	"main/app/service"
 	"main/app/utils"
@@ -19,6 +20,7 @@ func TodoRoutes(api *gin.RouterGroup, db *gorm.DB){
 
 	todo := api.Group("/todo")
 	{
+		todo.Use(middleware.Authorize())
 		todo.GET("/", GetTodos(todoController))
 		todo.POST("/", CreateTodo(todoController))
 		todo.GET("/:id", GetTodoById(todoController))
