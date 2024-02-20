@@ -7,7 +7,7 @@ import (
 )
 
 type TodoService interface {
-	CreateTodo(models.Todo) (models.Todo, error)
+	CreateTodo(models.Todo, int) (models.Todo, error)
 	GetTodoById(string) (models.Todo, error)
 	GetTodos() ([]models.Todo, error)
 	DeleteTodoById(string) (string, error)
@@ -26,7 +26,7 @@ func NewTodoService(todoRepository *repository.TodoRepository) TodoService {
 }
 
 
-func (ts *todoService) CreateTodo(todo models.Todo) (models.Todo, error) {
+func (ts *todoService) CreateTodo(todo models.Todo, userId int) (models.Todo, error) {
 	if todo.Title == "" {
 		return models.Todo{}, fmt.Errorf("title cannot be empty")
 	}
@@ -39,6 +39,7 @@ func (ts *todoService) CreateTodo(todo models.Todo) (models.Todo, error) {
 	t.Title = todo.Title
 	t.Description = todo.Description
 	t.IsFinished = false
+	t.UserID = userId
 
 	_, err := ts.todoRepository.CreateTodo(&t)
 	if err != nil {

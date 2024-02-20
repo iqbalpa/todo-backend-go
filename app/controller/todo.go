@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"main/app/models"
 	"main/app/service"
 
@@ -35,7 +36,23 @@ func (tc *todoController) CreateTodo(ctx *gin.Context) (models.Todo, error) {
 	if err != nil {
 		return models.Todo{}, err
 	}
-	_, err = tc.service.CreateTodo(todo)
+	// get the userId
+	userId, ok := ctx.Get("userId")
+	if !ok {
+		return models.Todo{}, fmt.Errorf("failed to get the userId")
+	}
+	// Use type assertion to convert the value to int
+	var userIdInt int
+	switch v := userId.(type) {
+	case int:
+		userIdInt = v
+	case float64:
+		userIdInt = int(v)
+	default:
+		return models.Todo{}, fmt.Errorf("failed to parse userId")
+	}
+	// call the service function
+	_, err = tc.service.CreateTodo(todo, userIdInt)
 	if err != nil {
 		return models.Todo{}, err
 	}

@@ -1,7 +1,6 @@
 package app
 
 import (
-	"main/app/middleware"
 	"main/app/models"
 	"main/app/routes"
 	"main/app/utils"
@@ -31,7 +30,6 @@ func NewApp() *App {
 
 	// grouping api
 	api := router.Group("/api/v1")
-	api.Use(middleware.UserIdExtractor())
 
 	return &App{
 		api:    api,
