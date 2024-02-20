@@ -11,7 +11,7 @@ import (
 
 type UserController interface {
 	CreateUser(ctx *gin.Context) (models.User, error)
-	LoginUser(ctx *gin.Context) (string, error)
+	LoginUser(ctx *gin.Context) (map[string]string, error)
 }
 
 type userController struct {
@@ -41,18 +41,19 @@ func (uc *userController) CreateUser(ctx *gin.Context) (models.User, error) {
 	return user, nil
 }
 
-func (uc *userController) LoginUser(ctx *gin.Context) (string, error) {
+func (uc *userController) LoginUser(ctx *gin.Context) (map[string]string, error) {
 	var loginRequest dto.LoginRequest
 	err := ctx.ShouldBindJSON(&loginRequest)
 	if err != nil {
-		return "", err
+		return make(map[string]string), err
 	}
 	// get the username and password
 	username := loginRequest.Username
 	password := loginRequest.Password
 	token, err := uc.service.LoginUser(username, password)
 	if err != nil {
-		return "", err
+		return make(map[string]string), err
 	}
-	return token, nil
+	tokenMap := map[string]string{"token": token}
+	return tokenMap, nil
 }
