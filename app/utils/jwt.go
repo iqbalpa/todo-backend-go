@@ -21,7 +21,7 @@ func CreateToken(user models.User) (string, error) {
 			"expired": time.Now().Add(time.Hour * 1).Unix(),
 		},
 	)
-	tokenString, err := token.SignedString(config.GetJwtExpiration())
+	tokenString, err := token.SignedString([]byte(config.GetJwtSecretKey()))
 	if err != nil {
 		return "", err
 	}
@@ -32,7 +32,7 @@ func CreateToken(user models.User) (string, error) {
 func VerifyToken(tokenString string) error {
 	config := config.LoadEnv()
 	token, err := jwt.Parse(tokenString, func(t *jwt.Token) (interface{}, error) {
-		return config.GetJwtSecretKey(), nil
+		return []byte(config.GetJwtSecretKey()), nil
 	})
 	if err != nil {
 		return err

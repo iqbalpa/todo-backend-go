@@ -11,7 +11,7 @@ import (
 // Log the entire request details
 func LogRequest(c *gin.Context, filename string) {
 	request := c.Request
-	log.Printf("===== %s =====", filename)
+	log.Printf("\n===== %s =====", filename)
 	log.Printf("Method: %s\n URL: %s\n Headers: %v\n", request.Method, request.URL, request.Header)
 	// Log the request body, if any
     body, err := ioutil.ReadAll(c.Request.Body)
@@ -21,5 +21,5 @@ func LogRequest(c *gin.Context, filename string) {
         return
     }
     log.Println("Request Body:", string(body))
-	log.Println("===== end log =====")
+	log.Println("\n===== end log =====")
 }
