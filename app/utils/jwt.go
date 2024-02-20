@@ -42,3 +42,23 @@ func VerifyToken(tokenString string) error {
 	}
 	return nil
 }
+
+// extract the userId from jwt token
+func ExtractClaimsUserId(tokenString string) (int, error) {
+	// parse the jwt token
+	token, _, err := new(jwt.Parser).ParseUnverified(tokenString, jwt.MapClaims{})
+	if err != nil {
+		return 0, fmt.Errorf("failed to parse the token")
+	}
+	// check the claims
+	if claims, ok := token.Claims.(jwt.MapClaims); ok {
+		// Use type assertion to convert the value to int
+		if userIdFloat, ok := claims["userId"].(float64); ok {
+			userId := int(userIdFloat)
+			return userId, nil
+		} else {
+			return 0, fmt.Errorf("userId is not a float64")
+		}
+	}
+	return 0, fmt.Errorf("failed to get the claims")
+}
