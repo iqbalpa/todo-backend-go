@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"main/app/models"
 	"main/app/service"
+	"main/app/utils"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
@@ -37,22 +38,13 @@ func (tc *todoController) CreateTodo(ctx *gin.Context) (models.Todo, error) {
 		return models.Todo{}, err
 	}
 	// get the userId
-	userId, ok := ctx.Get("userId")
-	if !ok {
+	token := ctx.GetString("token")
+	userId, err := utils.ExtractClaimsUserId(token)
+	if err != nil {
 		return models.Todo{}, fmt.Errorf("failed to get the userId")
 	}
-	// Use type assertion to convert the value to int
-	var userIdInt int
-	switch v := userId.(type) {
-	case int:
-		userIdInt = v
-	case float64:
-		userIdInt = int(v)
-	default:
-		return models.Todo{}, fmt.Errorf("failed to parse userId")
-	}
 	// call the service function
-	_, err = tc.service.CreateTodo(todo, userIdInt)
+	_, err = tc.service.CreateTodo(todo, userId)
 	if err != nil {
 		return models.Todo{}, err
 	}

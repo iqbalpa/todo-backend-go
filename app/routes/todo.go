@@ -21,7 +21,6 @@ func TodoRoutes(api *gin.RouterGroup, db *gorm.DB){
 	todo := api.Group("/todo")
 	{
 		todo.Use(middleware.Authorize())
-		// todo.Use(middleware.UserIdExtractor())
 		todo.GET("/", GetTodos(todoController))
 		todo.POST("/", CreateTodo(todoController))
 		todo.GET("/:id", GetTodoById(todoController))
