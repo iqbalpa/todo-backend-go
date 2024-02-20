@@ -21,6 +21,8 @@ func NewApp() *App {
 	utils.ConnectDB()
 	// migrate models
 	utils.DB.AutoMigrate(&models.Todo{}, &models.User{})
+	// create foreign key
+	utils.DB.Model(&models.Todo{}).AddForeignKey("user_id", "users(id)", "CASCADE", "CASCADE")
 
 	// initiate router
 	router := gin.Default()

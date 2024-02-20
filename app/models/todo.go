@@ -9,4 +9,5 @@ type Todo struct {
 	Title 		string `json:"title" binding:"required"`
 	Description string `json:"desc" binding:"required"`
 	IsFinished 	bool   `json:"isFinished" gorm:"default:false"`
+	UserID		int    `json:"userId"`
 }
