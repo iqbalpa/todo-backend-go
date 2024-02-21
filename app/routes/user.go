@@ -2,6 +2,7 @@ package routes
 
 import (
 	"main/app/controller"
+	"main/app/middleware"
 	"main/app/repository"
 	"main/app/service"
 	"main/app/utils"
@@ -21,6 +22,9 @@ func UserRoutes(api *gin.RouterGroup, db *gorm.DB){
 	{
 		user.POST("/register", CreateUser(userController))
 		user.POST("/login", LoginUser(userController))
+		
+		user.Use(middleware.Authorize())
+		user.GET("/", GetUserById(userController))
 	}
 }
 
@@ -42,6 +46,17 @@ func LoginUser(userController controller.UserController) gin.HandlerFunc {
 			utils.FailedResponse(ctx, "FAILED", "failed to login", err)
 		} else {
 			utils.SuccessResponse(ctx, "login success", token)
+		}
+	}
+}
+
+func GetUserById(userController controller.UserController) gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		user, err := userController.GetUserById(ctx)
+		if err != nil {
+			utils.FailedResponse(ctx, "FAILED", "failed to get user", err)
+		} else {
+			utils.SuccessResponse(ctx, "user retrieved", user)
 		}
 	}
 }

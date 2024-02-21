@@ -9,6 +9,7 @@ import (
 type UserService interface {
 	CreateUser(models.User) (models.User, error)
 	LoginUser(string, string) (string, error)
+	GetUserById(int) (models.User, error)
 }
 
 type userService struct {
@@ -44,4 +45,12 @@ func (us *userService) LoginUser(username, password string) (string, error) {
 		return "", err
 	}
 	return token, nil
+}
+
+func (us *userService) GetUserById(userId int) (models.User, error) {
+	user, err := us.userRepository.GetUserById(userId)
+	if err != nil {
+		return models.User{}, err
+	}
+	return user, nil
 }

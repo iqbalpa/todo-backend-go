@@ -1,17 +1,21 @@
 package controller
 
 import (
+	"fmt"
+	"log"
 	"main/app/dto"
 	"main/app/models"
 	"main/app/service"
+	"main/app/utils"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
 )
 
 type UserController interface {
-	CreateUser(ctx *gin.Context) (models.User, error)
-	LoginUser(ctx *gin.Context) (map[string]string, error)
+	CreateUser(*gin.Context) (models.User, error)
+	LoginUser(*gin.Context) (map[string]string, error)
+	GetUserById(*gin.Context) (models.User, error)
 }
 
 type userController struct {
@@ -56,4 +60,21 @@ func (uc *userController) LoginUser(ctx *gin.Context) (map[string]string, error)
 	}
 	tokenMap := map[string]string{"token": token}
 	return tokenMap, nil
+}
+
+func (uc *userController) GetUserById(ctx *gin.Context) (models.User, error) {
+	// get the userId
+	token := ctx.GetString("token")
+	log.Println("controller/user.go\ntoken: ", token)
+	userId, err := utils.ExtractClaimsUserId(token)
+	log.Println("user id: ", userId)
+	if err != nil {
+		return models.User{}, fmt.Errorf("failed to get the userId")
+	}
+	user, err := uc.service.GetUserById(userId)
+	if err != nil {
+		return models.User{}, err
+	}
+	user.Password = ""
+	return user, nil
 }

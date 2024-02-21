@@ -49,3 +49,13 @@ func (ur *UserRepository) LoginUser(username, password string) (string, error) {
 	}
 	return token, nil
 }
+
+// get user data
+func (ur *UserRepository) GetUserById(userId int) (models.User, error) {
+	var user models.User
+	err := utils.DB.Preload("Todos").First(&user, userId).Error
+	if err != nil {
+		return models.User{}, err
+	}
+	return user, nil
+}
