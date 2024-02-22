@@ -31,6 +31,9 @@ func NewApp() *App {
 	// grouping api
 	api := router.Group("/api/v1")
 
+	// production
+	gin.SetMode(gin.ReleaseMode)
+
 	return &App{
 		api:    api,
 		db:     utils.DB,
