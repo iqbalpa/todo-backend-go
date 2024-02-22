@@ -48,8 +48,14 @@ func (tr *TodoRepository) GetTodos(userId int) ([]models.Todo, error){
 
 // delete announcement by id
 func (tr *TodoRepository) DeleteTodoById(id string, userId int) (string, error) {
+	// the get function
+	_, err := tr.GetTodoById(id, userId)
+	if err != nil {
+		return "this todo is not yours", fmt.Errorf("this todo is not yours")
+	}
+	// delete function
 	var todo models.Todo
-	err := utils.DB.Where("id = ?", id).Delete(&todo).Error
+	err = utils.DB.Where("id = ?", id).Delete(&todo).Error
 	if err != nil {
 		return "failed to delete", err
 	}
