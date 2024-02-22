@@ -8,11 +8,11 @@ import (
 
 type TodoService interface {
 	CreateTodo(models.Todo, int) (models.Todo, error)
-	GetTodoById(string) (models.Todo, error)
+	GetTodoById(string, int) (models.Todo, error)
 	GetTodos(int) ([]models.Todo, error)
-	DeleteTodoById(string) (string, error)
-	UpdateTodoById(string, models.Todo) (models.Todo, error)
-	FinishTodoById(string) (models.Todo, error)
+	DeleteTodoById(string, int) (string, error)
+	UpdateTodoById(string, models.Todo, int) (models.Todo, error)
+	FinishTodoById(string, int) (models.Todo, error)
 }
 
 type todoService struct {
@@ -48,8 +48,8 @@ func (ts *todoService) CreateTodo(todo models.Todo, userId int) (models.Todo, er
 	return t, nil
 }
 
-func (ts *todoService) GetTodoById(id string) (models.Todo, error) {
-	todo, err := ts.todoRepository.GetTodoById(id)
+func (ts *todoService) GetTodoById(id string, userId int) (models.Todo, error) {
+	todo, err := ts.todoRepository.GetTodoById(id, userId)
 	if err != nil {
 		return models.Todo{}, err
 	}
@@ -64,21 +64,21 @@ func (ts *todoService) GetTodos(userId int) ([]models.Todo, error) {
 	return todos, nil
 }
 
-func (ts *todoService) DeleteTodoById(id string) (string, error) {
-	str, err := ts.todoRepository.DeleteTodoById(id)
+func (ts *todoService) DeleteTodoById(id string, userId int) (string, error) {
+	str, err := ts.todoRepository.DeleteTodoById(id, userId)
 	return str, err
 }
 
-func (ts *todoService) UpdateTodoById(id string, todo models.Todo) (models.Todo, error) {
-	updatedTodo, err := ts.todoRepository.UpdateTodoById(id, &todo)
+func (ts *todoService) UpdateTodoById(id string, todo models.Todo, userId int) (models.Todo, error) {
+	updatedTodo, err := ts.todoRepository.UpdateTodoById(id, &todo, userId)
 	if err != nil {
 		return models.Todo{}, err
 	}
 	return *updatedTodo, nil
 }
 
-func (ts *todoService) FinishTodoById(id string) (models.Todo, error) {
-	todo, err := ts.todoRepository.FinishTodoById(id)
+func (ts *todoService) FinishTodoById(id string, userId int) (models.Todo, error) {
+	todo, err := ts.todoRepository.FinishTodoById(id, userId)
 	if err != nil {
 		return models.Todo{}, err
 	}

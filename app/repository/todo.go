@@ -23,7 +23,7 @@ func (tr *TodoRepository) CreateTodo(todo *models.Todo) (*models.Todo, error) {
 }
 
 // Get todo instance by id
-func (tr *TodoRepository) GetTodoById(id string) (models.Todo, error) {
+func (tr *TodoRepository) GetTodoById(id string, userId int) (models.Todo, error) {
 	var todo models.Todo
 	err := utils.DB.Where("id = ?", id).Take(&todo).Error
 	if err != nil {
@@ -43,7 +43,7 @@ func (tr *TodoRepository) GetTodos(userId int) ([]models.Todo, error){
 }
 
 // delete announcement by id
-func (tr *TodoRepository) DeleteTodoById(id string) (string, error) {
+func (tr *TodoRepository) DeleteTodoById(id string, userId int) (string, error) {
 	var todo models.Todo
 	err := utils.DB.Where("id = ?", id).Delete(&todo).Error
 	if err != nil {
@@ -53,7 +53,7 @@ func (tr *TodoRepository) DeleteTodoById(id string) (string, error) {
 }
 
 // update todo (title and desc)
-func (tr *TodoRepository) UpdateTodoById(id string, todo *models.Todo) (*models.Todo, error) {
+func (tr *TodoRepository) UpdateTodoById(id string, todo *models.Todo, userId int) (*models.Todo, error) {
 	err := utils.DB.Model(&models.Todo{}).Where("id = ?", id).Updates(todo).Error
 	if err != nil {
 		return &models.Todo{}, err
@@ -62,7 +62,7 @@ func (tr *TodoRepository) UpdateTodoById(id string, todo *models.Todo) (*models.
 }
 
 // finish todo
-func (tr *TodoRepository) FinishTodoById(id string) (models.Todo, error) {
+func (tr *TodoRepository) FinishTodoById(id string, userId int) (models.Todo, error) {
 	var todo models.Todo
 	err := utils.DB.First(&todo, "id = ?", id).Error
 	if err != nil {
