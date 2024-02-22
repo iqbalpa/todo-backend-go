@@ -59,7 +59,7 @@ func (ts *todoService) GetTodoById(id string, userId int) (models.Todo, error) {
 func (ts *todoService) GetTodos(userId int) ([]models.Todo, error) {
 	todos, err := ts.todoRepository.GetTodos(userId)
 	if err != nil {
-		return []models.Todo{}, nil
+		return []models.Todo{}, err
 	}
 	return todos, nil
 }
