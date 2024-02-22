@@ -1,10 +1,8 @@
 package controller
 
 import (
-	"fmt"
 	"main/app/models"
 	"main/app/service"
-	"main/app/utils"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
@@ -38,11 +36,7 @@ func (tc *todoController) CreateTodo(ctx *gin.Context) (models.Todo, error) {
 		return models.Todo{}, err
 	}
 	// get the userId
-	token := ctx.GetString("token")
-	userId, err := utils.ExtractClaimsUserId(token)
-	if err != nil {
-		return models.Todo{}, fmt.Errorf("failed to get the userId")
-	}
+	userId := ctx.GetInt("userId")
 	// call the service function
 	_, err = tc.service.CreateTodo(todo, userId)
 	if err != nil {
@@ -61,7 +55,8 @@ func (tc *todoController) GetTodoById(ctx *gin.Context) (models.Todo, error) {
 }
 
 func (tc *todoController) GetTodos(ctx *gin.Context) ([]models.Todo, error) {
-	todos, err := tc.service.GetTodos()
+	userId := ctx.GetInt("userId")
+	todos, err := tc.service.GetTodos(userId)
 	if err != nil {
 		return []models.Todo{}, err
 	}

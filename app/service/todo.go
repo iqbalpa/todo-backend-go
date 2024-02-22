@@ -9,7 +9,7 @@ import (
 type TodoService interface {
 	CreateTodo(models.Todo, int) (models.Todo, error)
 	GetTodoById(string) (models.Todo, error)
-	GetTodos() ([]models.Todo, error)
+	GetTodos(int) ([]models.Todo, error)
 	DeleteTodoById(string) (string, error)
 	UpdateTodoById(string, models.Todo) (models.Todo, error)
 	FinishTodoById(string) (models.Todo, error)
@@ -56,8 +56,8 @@ func (ts *todoService) GetTodoById(id string) (models.Todo, error) {
 	return todo, nil
 }
 
-func (ts *todoService) GetTodos() ([]models.Todo, error) {
-	todos, err := ts.todoRepository.GetTodos()
+func (ts *todoService) GetTodos(userId int) ([]models.Todo, error) {
+	todos, err := ts.todoRepository.GetTodos(userId)
 	if err != nil {
 		return []models.Todo{}, nil
 	}

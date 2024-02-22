@@ -11,6 +11,8 @@ func NewTodoRepository() *TodoRepository {
 	return &TodoRepository{}
 }
 
+// TODO: create restriction, therefore user can only access their own todos
+
 // Create todo instance
 func (tr *TodoRepository) CreateTodo(todo *models.Todo) (*models.Todo, error) {
 	err := utils.DB.Create(todo).Error
@@ -31,9 +33,9 @@ func (tr *TodoRepository) GetTodoById(id string) (models.Todo, error) {
 }
 
 // Get all todo instances
-func (tr *TodoRepository) GetTodos() ([]models.Todo, error){
+func (tr *TodoRepository) GetTodos(userId int) ([]models.Todo, error){
 	var todos []models.Todo
-	err := utils.DB.Find(&todos).Error
+	err := utils.DB.Where("user_id = ?", userId).Find(&todos).Error
 	if err != nil {
 		return []models.Todo{}, nil
 	}

@@ -22,6 +22,18 @@ func Authorize() gin.HandlerFunc {
 		}
 		ctx.Set("token", token)
 		ctx.Set("isAuthenticated", true)
+
+		// set the userId
+		userId, err := utils.ExtractClaimsUserId(token)
+		if err != nil {
+			ctx.AbortWithStatusJSON(http.StatusUnauthorized,
+				gin.H{
+					"error": err.Error(),
+				},
+			)
+			return
+		}
+		ctx.Set("userId", userId)
 		ctx.Next()
 	}
 }
