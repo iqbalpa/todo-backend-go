@@ -89,7 +89,7 @@ func (config *Config) GetDSN() string {
 }
 
 func (config *Config) GetServerPort() string {
-	return fmt.Sprintf("%s:%s", config.DatabaseHost, config.ServerPort)
+	return fmt.Sprintf("localhost:%s", config.ServerPort)
 }
 
 func (config *Config) GetJwtSecretKey() string {
