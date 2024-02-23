@@ -8,8 +8,6 @@ RUN go mod download
 
 COPY . ./
 
-COPY .env .env
-
 RUN CGO_ENABLED=0 GOOS=linux go build -o /todo-go
 
 EXPOSE 8080
